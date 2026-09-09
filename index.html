@@ -3,6 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Auto Startup — 一款 Agent 调用为 0 的 AI 创业模拟器</title>
+<meta name="description" content="玩家 0，用户 0，估值 420 万美元。一款没有真实 AI Agent 调用、但很有 Agent 氛围的创业讽刺游戏。">
+<meta property="og:title" content="Auto Startup — 0 Agents, $4.2M Valuation">
+<meta property="og:description" content="No users. No revenue. Infinite pivots. Extremely agentic.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#13130E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%23E8B53A'/%3E%3Cpath d='M18 47 28 17h9l10 30h-9l-2-7H27l-2 7Zm11-14h5l-2-8Z' fill='%2315150F'/%3E%3C/svg%3E">
 <script src="./landing-support.js"></script>
 </head>
 <body>
@@ -17,8 +24,27 @@
   @keyframes fadeUp { 0% { transform: translateY(18px); } 100% { transform: translateY(0); } }
   @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
   @keyframes barGrow { 0% { transform: scaleX(0); } 100% { transform: scaleX(1); } }
+  @keyframes stampIn { 0% { opacity:0; transform:rotate(-2deg) scale(1.12); } 100% { opacity:1; transform:rotate(-2deg) scale(1); } }
   .navlink { display: none; }
+  .audit-red { color:#D9473F; font-family:'Space Mono',monospace; }
+  .audit-stamp { display:inline-block; color:#D9473F; border:2px solid #D9473F; border-radius:4px; padding:7px 11px; font-family:'Space Mono',monospace; font-size:10px; font-weight:700; letter-spacing:.08em; line-height:1.35; transform:rotate(-2deg); animation:stampIn .55s ease both; background:rgba(217,71,63,.035); }
+  .strike-x { position:relative; display:inline-block; color:#777267; }
+  .strike-x::before, .strike-x::after { content:''; position:absolute; left:-3%; top:50%; width:106%; height:2px; background:#D9473F; transform-origin:center; }
+  .strike-x::before { transform:rotate(3deg); }
+  .strike-x::after { transform:rotate(-4deg); }
+  .metric-board { overflow:hidden; background:#13130E; color:#ECECE4; border:1px solid #2A2920; border-radius:18px; box-shadow:0 30px 70px -45px rgba(20,18,10,.65); margin:0 0 20px; }
+  .metric-board-head, .metric-board-row { display:grid; grid-template-columns:minmax(120px,1.1fr) minmax(76px,.45fr) minmax(150px,1fr); gap:16px; align-items:center; }
+  .metric-board-head { padding:14px 20px; border-bottom:1px solid #2A2920; color:#7F7D73; font-family:'Space Mono',monospace; font-size:9px; letter-spacing:.16em; }
+  .metric-board-row { padding:14px 20px; border-bottom:1px solid #262520; }
+  .metric-board-row:last-child { border-bottom:none; }
+  .metric-board-value { color:#E8B53A; font-family:'Space Mono',monospace; font-size:20px; font-weight:700; }
+  .metric-board-status { color:#AAA79D; font-family:'Space Mono',monospace; font-size:10px; letter-spacing:.06em; }
   @media (min-width: 780px) { .navlink { display: inline !important; } }
+  @media (max-width: 620px) {
+    .metric-board-head { display:none; }
+    .metric-board-row { grid-template-columns:1fr auto; gap:5px 14px; }
+    .metric-board-status { grid-column:1 / -1; }
+  }
 </style>
 </helmet>
 <div style="min-height:100vh; width:100%; background:#F6F4EF; color:#1A1813; font-family:'Space Grotesk','Noto Sans SC',system-ui,sans-serif; overflow-x:hidden;">
@@ -56,6 +82,10 @@
       </div>
       <h1 style="font-size:clamp(38px,5.6vw,62px); line-height:1.04; font-weight:700; letter-spacing:-.025em; margin:0 0 22px; text-wrap:balance;">{{ heroTitle }}</h1>
       <p style="font-size:clamp(16px,1.5vw,18.5px); line-height:1.62; color:#5A564B; max-width:34em; margin:0 0 32px; text-wrap:pretty;">{{ heroSub }}</p>
+      <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin:-10px 0 30px;">
+        <span class="strike-x" style="font-family:'Space Mono',monospace; font-size:11px; font-weight:700; letter-spacing:.08em;">{{ agentClaim }}</span>
+        <span class="audit-stamp">{{ agentReality }}</span>
+      </div>
       <div style="display:flex; flex-wrap:wrap; gap:13px; align-items:center;">
         <a href="{{ gameUrl }}" style="font-weight:600; font-size:16px; color:#15150F; background:#E8B53A; border-radius:12px; padding:15px 30px; text-decoration:none; box-shadow:0 12px 32px -10px rgba(232,181,58,.75);" style-hover="transform:translateY(-2px); box-shadow:0 18px 40px -10px rgba(232,181,58,.8);">{{ heroCta }} →</a>
         <a href="{{ githubUrl }}" target="_blank" style="display:none; font-weight:600; font-size:15px; color:#1A1813; background:#FFFFFF; border:1px solid #DDD8CA; border-radius:12px; padding:14px 24px; text-decoration:none;" style-hover="border-color:#1A1813;">{{ heroSecondary }}</a>
@@ -74,7 +104,7 @@
           <div style="font-family:'Space Mono',monospace; font-size:10px; letter-spacing:.18em; color:#7A786F;">{{ previewValLabel }}</div>
         </div>
         <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:20px;">
-          <div style="font-family:'Space Mono',monospace; font-weight:700; font-size:40px; line-height:1;">{{ previewVal }}</div>
+          <div class="strike-x" style="font-family:'Space Mono',monospace; font-weight:700; font-size:40px; line-height:1; color:#ECECE4;">{{ previewVal }}</div>
           <div style="font-family:'Space Mono',monospace; font-size:15px; font-weight:700; color:#62D08A;">{{ previewDelta }}</div>
         </div>
         <div style="display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px;">
@@ -88,6 +118,7 @@
             </div>
           </sc-for>
         </div>
+        <div class="audit-red" style="font-size:10px; margin-top:15px; transform:rotate(-1deg);">✕ {{ previewAudit }}</div>
       </div>
     </div>
   </div>
@@ -102,7 +133,8 @@
         </div>
       </sc-for>
     </div>
-    <div style="text-align:center; font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:.18em; color:#A8A293; margin:26px 0 0;">{{ strip }}</div>
+    <div style="text-align:center; font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:.18em; color:#A8A293; margin:26px 0 8px;"><span class="strike-x">{{ strip }}</span></div>
+    <div class="audit-red" style="text-align:center; font-size:10px; letter-spacing:.08em;">{{ stripAudit }}</div>
   </div>
 
   <!-- ===== LOOP ===== -->
@@ -182,6 +214,7 @@
       <div style="max-width:32em; margin-bottom:44px;">
         <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.2em; color:#8A6D1F; margin-bottom:14px;">{{ agentsKicker }}</div>
         <h2 style="font-size:clamp(28px,4vw,42px); font-weight:700; letter-spacing:-.02em; line-height:1.1; margin:0; text-wrap:balance;">{{ agentsTitle }}</h2>
+        <div class="audit-stamp" style="margin-top:20px;">✕ {{ agentsAudit }}</div>
       </div>
       <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:18px;">
         <sc-for list="{{ features }}" as="f" hint-placeholder-count="3">
@@ -189,6 +222,7 @@
             <div style="font-family:'Space Mono',monospace; font-size:13px; font-weight:700; color:#15150F; background:#E8B53A; width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; margin-bottom:18px;">{{ f.n }}</div>
             <div style="font-size:19px; font-weight:700; letter-spacing:-.01em; margin-bottom:9px;">{{ f.t }}</div>
             <div style="font-size:14.5px; line-height:1.6; color:#6E6A5E;">{{ f.d }}</div>
+            <div class="audit-red" style="font-size:10px; line-height:1.5; margin-top:14px; border-top:1px dashed rgba(217,71,63,.35); padding-top:10px;">→ {{ f.audit }}</div>
           </div>
         </sc-for>
       </div>
@@ -201,6 +235,17 @@
       <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.2em; color:#8A6D1F; margin-bottom:14px;">{{ metricsKicker }}</div>
       <h2 style="font-size:clamp(28px,4vw,42px); font-weight:700; letter-spacing:-.02em; line-height:1.1; margin:0 0 14px; text-wrap:balance;">{{ metricsTitle }}</h2>
       <p style="font-size:16px; line-height:1.6; color:#5A564B; margin:0;">{{ metricsSub }}</p>
+    </div>
+    <div class="metric-board">
+      <div class="metric-board-head"><span>{{ boardMetric }}</span><span>{{ boardValue }}</span><span>{{ boardInterpretation }}</span></div>
+      <sc-for list="{{ jokeMetrics }}" as="j" hint-placeholder-count="7">
+        <div class="metric-board-row">
+          <div style="font-size:14px; font-weight:600;">{{ j.name }}</div>
+          <div class="metric-board-value">{{ j.value }}</div>
+          <div class="metric-board-status">{{ j.status }}</div>
+        </div>
+      </sc-for>
+      <div class="audit-red" style="padding:14px 20px; font-size:10px; line-height:1.5; background:rgba(217,71,63,.04);">※ {{ boardAudit }}</div>
     </div>
     <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px;">
       <sc-for list="{{ metrics }}" as="m" hint-placeholder-count="7">
@@ -300,6 +345,7 @@
       </div>
       <a href="{{ githubUrl }}" target="_blank" style="display:none; font-family:'Space Mono',monospace; font-size:12px; color:#5A564B; text-decoration:none;" style-hover="color:#1A1813;">GitHub ↗</a>
     </div>
+    <div class="audit-red" style="max-width:1140px; margin:0 auto; padding:0 clamp(18px,4vw,32px) 24px; font-size:10px; text-align:center; letter-spacing:.08em;">{{ footerAudit }}</div>
   </div>
 
 </div>
@@ -317,28 +363,32 @@ class Component extends DCLogic {
         navCta: 'Enter Game',
         heroKicker: 'AI STARTUP SIMULATOR',
         heroTitle: 'Build a startup from a single idea.',
-        heroSub: 'Auto Startup drops you into a living startup ecosystem run by AI agents. Pitch your team, read the market, survive your investors — and steer one idea all the way to IPO, acquisition, pivot, or collapse.',
+        heroSub: 'Pitch your team, read the market, survive your investors — and steer one idea all the way to IPO, acquisition, pivot, or collapse. The company is fictional. The confidence is operational.',
+        agentClaim: 'POWERED BY 31 AUTONOMOUS AI AGENTS',
+        agentReality: 'ACTUAL AGENT CALLS: 0',
         heroCta: 'Enter the Game',
         heroSecondary: 'View on GitHub',
         heroNote: 'No real funding required. No real funding implied.',
         previewWeek: 'WEEK 14',
-        previewValLabel: 'VALUATION',
+        previewValLabel: 'VALUATION · SELF-REPORTED',
         previewVal: '$4.2M',
         previewDelta: '▲ 18%',
         previewStats: [
-          {label:'HYPE', val:'72', pct:'72%', color:'#E8B53A'},
-          {label:'PRODUCT', val:'48', pct:'48%', color:'#62D08A'},
-          {label:'CASH', val:'21', pct:'21%', color:'#E8734A'},
-          {label:'TEAM', val:'66', pct:'66%', color:'#62D08A'},
-          {label:'TRUST', val:'54', pct:'54%', color:'#6FA8E8'},
-          {label:'SANITY', val:'37', pct:'37%', color:'#C58BE8'},
+          {label:'PLAYERS', val:'0', pct:'0%', color:'#E8B53A'},
+          {label:'USERS', val:'0', pct:'0%', color:'#62D08A'},
+          {label:'AGENT CALLS', val:'0', pct:'0%', color:'#6FA8E8'},
+          {label:'HYPE', val:'94', pct:'94%', color:'#E8B53A'},
+          {label:'DRIFT', val:'87', pct:'87%', color:'#C58BE8'},
+          {label:'CONFIDENCE', val:'100', pct:'100%', color:'#E8734A'},
         ],
+        previewAudit: 'Revenue is still $0. Please value the company on vibes.',
         heroStats: [
-          {n:'7', t:'metrics between you and ruin'},
-          {n:'∞', t:'pivots — the market demands it'},
-          {n:'1', t:'idea where everything starts'},
+          {n:'0', t:'players before this sentence was written'},
+          {n:'∞', t:'pivots, now rebranded as strategy'},
+          {n:'$4.2M', t:'valuation, founder-verified'},
         ],
         strip: 'RUNS ON AI AGENTS · NOT ON REAL MONEY · DEFINITELY NOT FINANCIAL ADVICE',
+        stripAudit: '✕ Correction: runs on JavaScript, prewritten events, and founder-grade confidence.',
         loopKicker: 'THE REAL LOOP',
         loopTitle: "Startups don't go in a straight line.",
         loopSub: 'The neat version is idea → product → funding → success. The real version is a loop you never quite escape.',
@@ -349,7 +399,7 @@ class Component extends DCLogic {
         weekSub: 'The game moves week by week. Each one runs the same loop — and never quite the same outcome.',
         weekSteps: [
           {n:'01', t:'Market news', d:'The world shifts. A rival raises, a season turns, the press picks a narrative.'},
-          {n:'02', t:'Agent roundtable', d:'Your team, investors and users weigh in — in different voices, rarely agreeing.'},
+          {n:'02', t:'Agent roundtable*', d:'Your team, investors and users weigh in. *All attendees are prewritten objects; attendance is 100%.'},
           {n:'03', t:'Your call', d:'Pick from a handful of options. No tooltip tells you which one is right.'},
           {n:'04', t:'Metrics shift', d:'Seven numbers move. Some up, some down — always a trade.'},
           {n:'05', t:'Next event unlocks', d:'Your choice opens the door to whatever comes after it.'},
@@ -375,24 +425,38 @@ class Component extends DCLogic {
           {icon:'$', name:'Cash Cow', d:'Cash pressure is eased.'},
           {icon:'☉', name:'Blessed by RNG', d:'Risky events pass more often.'},
         ],
-        agentsKicker: 'A LIVING ECOSYSTEM',
-        agentsTitle: 'A startup ecosystem, simulated.',
+        agentsKicker: 'THE AGENTIC LAYER™',
+        agentsTitle: 'Multi-agent orchestration, technically speaking.',
+        agentsAudit: 'TECHNICAL AUDIT: NO AGENTS FOUND',
         features: [
-          {n:'01', t:'AI agents ecosystem', d:'Teammates, investors, users, judges, press, and rivals are all AI agents. They argue, push back, and respond to the same problem in different voices.'},
-          {n:'02', t:'Direction drift', d:'Your company pivots as the market, money, and users pull on it. A simple idea quietly mutates into a complex business narrative.'},
-          {n:'03', t:'Market cycles', d:'Funding booms, delivery crunches, AI hype, and skeptic seasons each rewrite the rules of survival.'},
+          {n:'01', t:'AI agents ecosystem*', d:'Teammates, investors, users, judges, press, and rivals all have different names and strongly held opinions.', audit:'Here, “agent” means an object with a name field.'},
+          {n:'02', t:'Direction drift', d:'Your company pivots as the market, money, and users pull on it. Three pivots later, nobody remembers the original idea.', audit:'Direction drift has been reclassified as product discovery.'},
+          {n:'03', t:'Market cycles', d:'Funding booms, delivery crunches, AI hype, and skeptic seasons rewrite the rules before the product ships.', audit:'Current moat: the pitch deck is 48 slides long.'},
         ],
-        metricsKicker: 'SEVEN NUMBERS',
-        metricsTitle: 'Seven numbers decide your fate.',
-        metricsSub: 'Push one up and another slips. There is no run with all seven green.',
+        metricsKicker: 'DUE DILIGENCE · DEFINITELY AUDITED',
+        metricsTitle: 'The numbers are speaking. Mostly about nothing.',
+        metricsSub: 'A live startup dashboard for a startup with no live users. Every zero is an early signal.',
+        boardMetric: 'METRIC',
+        boardValue: 'VALUE',
+        boardInterpretation: 'INVESTOR-GRADE INTERPRETATION',
+        jokeMetrics: [
+          {name:'Players', value:'0', status:'PRE-LAUNCH TRACTION'},
+          {name:'Real users', value:'0', status:'UNTOUCHED MARKET'},
+          {name:'AI agent calls', value:'0', status:'EXTREME TOKEN EFFICIENCY'},
+          {name:'Revenue', value:'$0', status:'PRE-MONETIZATION SCALE'},
+          {name:'Direction drift', value:'∞', status:'CONTINUOUS DISCOVERY'},
+          {name:'Hype', value:'94', status:'ORGANIC*'},
+          {name:'Valuation', value:'$4.2M', status:'FOUNDER-VERIFIED'},
+        ],
+        boardAudit: '* “Organic” means the founder posted the link in three group chats.',
         metrics: [
-          {key:'Hype', name:'Hype', color:'#E8B53A', d:'Market heat. Narrative momentum that opens doors — and sets traps.'},
-          {key:'Product', name:'Product', color:'#62D08A', d:'What you have actually shipped. The gap between demo and reality.'},
-          {key:'Cash', name:'Cash', color:'#E8734A', d:'Runway. The clock ticking behind every single decision.'},
-          {key:'Team', name:'Team', color:'#7FB85A', d:'Morale and cohesion. Founders walk when this hits zero.'},
-          {key:'Trust', name:'Trust', color:'#6FA8E8', d:'User belief. Hard to earn, dangerously easy to torch.'},
-          {key:'Reputation', name:'Reputation', color:'#C58BE8', d:'How the industry sees you. The press giveth and taketh.'},
-          {key:'Sanity', name:'Sanity', color:'#E8A23A', d:'Strategic clarity. Lose it and every choice looks the same.'},
+          {key:'Hype', name:'Hype', color:'#E8B53A', d:'The first product to ship. Usually before the actual product.'},
+          {key:'Product', name:'Product', color:'#62D08A', d:'Currently catching up with what the landing page already promised.'},
+          {key:'Cash', name:'Cash', color:'#E8734A', d:'A countdown presented as a growth strategy.'},
+          {key:'Team', name:'Team', color:'#7FB85A', d:'Morale, cohesion, and how many people still believe the pivot was intentional.'},
+          {key:'Trust', name:'Trust', color:'#6FA8E8', d:'Slow to earn. Fast to convert into a launch thread.'},
+          {key:'Reputation', name:'Reputation', color:'#C58BE8', d:'What the industry thinks after reading only the headline.'},
+          {key:'Sanity', name:'Sanity', color:'#E8A23A', d:'Strategic clarity. Also the first metric sacrificed at Demo Day.'},
         ],
         momentsKicker: 'KEY MOMENTS',
         momentsTitle: 'The milestones that make or break you.',
@@ -418,35 +482,40 @@ class Component extends DCLogic {
         ctaTitle: 'Your idea is waiting.',
         ctaSub: 'So is the market. So is your dwindling cash. Time to make the first call.',
         ctaBtn: 'Enter the Game',
-        footNote: 'AUTO STARTUP — an AI startup simulator · © 2026',
+        footNote: 'AUTO STARTUP — an AI startup simulator* · © 2026',
+        footerAudit: '* Built with no agents, no funding, and an unreasonable amount of confidence.',
       },
       zh: {
         navLinks: [{t:'理念',h:'#loop'},{t:'玩法',h:'#week'},{t:'指标',h:'#metrics'},{t:'结局',h:'#endings'}],
         navCta: '进入游戏',
         heroKicker: 'AI 创业模拟器',
         heroTitle: '从一个想法开始，造一家公司。',
-        heroSub: 'Auto Startup 把你放进一个由 AI Agents 驱动的创业生态。与团队博弈、读懂市场、应对投资人——带着一个想法，一路走向 IPO、被收购、转型，或者清算。',
+        heroSub: '与团队博弈、读懂市场、应对投资人——带着一个想法，一路走向 IPO、被收购、方向漂移，或者清算。公司是虚构的，自信是满格的。',
+        agentClaim: '由 31 个自主 AI AGENTS 协同驱动',
+        agentReality: '实际 AGENT 调用：0',
         heroCta: '进入游戏',
         heroSecondary: '查看 GitHub',
         heroNote: '无需真实融资。也不暗示有真实融资。',
         previewWeek: '第 14 周',
-        previewValLabel: '估值',
+        previewValLabel: '估值 · 创始人自报',
         previewVal: '$4.2M',
         previewDelta: '▲ 18%',
         previewStats: [
-          {label:'热度', val:'72', pct:'72%', color:'#E8B53A'},
-          {label:'产品', val:'48', pct:'48%', color:'#62D08A'},
-          {label:'现金', val:'21', pct:'21%', color:'#E8734A'},
-          {label:'团队', val:'66', pct:'66%', color:'#62D08A'},
-          {label:'信任', val:'54', pct:'54%', color:'#6FA8E8'},
-          {label:'清醒', val:'37', pct:'37%', color:'#C58BE8'},
+          {label:'玩家', val:'0', pct:'0%', color:'#E8B53A'},
+          {label:'用户', val:'0', pct:'0%', color:'#62D08A'},
+          {label:'AGENT 调用', val:'0', pct:'0%', color:'#6FA8E8'},
+          {label:'吹嘘', val:'94', pct:'94%', color:'#E8B53A'},
+          {label:'方向漂移', val:'87', pct:'87%', color:'#C58BE8'},
+          {label:'自信', val:'100', pct:'100%', color:'#E8734A'},
         ],
+        previewAudit: '营收仍为 0。请基于氛围感进行估值。',
         heroStats: [
-          {n:'7', t:'项指标，决定你的生死'},
-          {n:'∞', t:'次转型——市场逼着你改'},
-          {n:'1', t:'个想法，一切从这里开始'},
+          {n:'0', t:'个玩家——在写下这句话之前'},
+          {n:'∞', t:'次转型，已重新定义为战略'},
+          {n:'$4.2M', t:'估值，已经创始人验证'},
         ],
         strip: '由 AI AGENTS 驱动 · 不烧真钱 · 绝非投资建议',
+        stripAudit: '✕ 更正：由 JavaScript、预设事件和创始人级别的自信驱动。',
         loopKicker: '真实的循环',
         loopTitle: '创业从来不是一条直线。',
         loopSub: '理想版本是 想法 → 产品 → 融资 → 成功。真实版本，是一个你逃不出的循环。',
@@ -457,7 +526,7 @@ class Component extends DCLogic {
         weekSub: '游戏以「周」为单位推进。每周都跑同一个循环——但结果从不相同。',
         weekSteps: [
           {n:'01', t:'市场新闻', d:'世界在变。对手融资、季节更替、媒体选定了一个叙事。'},
-          {n:'02', t:'Agent 圆桌讨论', d:'团队、投资人、用户各执一词，用不同的声音，很少达成一致。'},
+          {n:'02', t:'Agent 圆桌讨论*', d:'团队、投资人、用户各执一词。*参会者均为预先写好的对象，出勤率 100%。'},
           {n:'03', t:'玩家做出选择', d:'从几个选项里挑一个。没有提示告诉你哪个是对的。'},
           {n:'04', t:'公司指标变化', d:'七个数字开始移动。有升有降，永远是权衡。'},
           {n:'05', t:'解锁后续事件', d:'你的选择，打开了接下来发生的事。'},
@@ -483,24 +552,38 @@ class Component extends DCLogic {
           {icon:'$', name:'现金奶牛', d:'Cash 压力降低。'},
           {icon:'☉', name:'玄学加持', d:'高风险事件更容易通过。'},
         ],
-        agentsKicker: '一个活的生态',
-        agentsTitle: '一整个创业生态，被模拟出来。',
+        agentsKicker: '智能体层™',
+        agentsTitle: '严格来说，这叫多智能体编排。',
+        agentsAudit: '技术审计：未发现任何 AGENT',
         features: [
-          {n:'01', t:'AI Agents 生态', d:'团队成员、投资人、用户、评委、媒体、竞争对手都是 AI Agent。他们会争论、反驳，用不同的声音回应同一个问题。'},
-          {n:'02', t:'方向漂移', d:'公司在市场、资金和用户的拉扯中不断转向。一个简单的想法，悄悄变成复杂的商业叙事。'},
-          {n:'03', t:'市场周期', d:'融资热潮、交付高压、AI 风口、质疑期——每一个都在重写生存规则。'},
+          {n:'01', t:'AI Agents 生态*', d:'团队、投资人、用户、评委和媒体都有不同名字，以及非常坚定的意见。', audit:'这里的「Agent」，主要指带 name 字段的对象。'},
+          {n:'02', t:'方向漂移', d:'公司在市场、资金和用户的拉扯中不断转向。漂移三次后，没人记得最初的想法。', audit:'方向漂移已经重新分类为「产品探索」。'},
+          {n:'03', t:'市场周期', d:'融资热潮、交付高压、AI 风口和质疑期，都比产品上线更早。', audit:'当前护城河：一份 48 页的 Pitch Deck。'},
         ],
-        metricsKicker: '七个数字',
-        metricsTitle: '七个数字，决定公司命运。',
-        metricsSub: '拉高一个，另一个就往下掉。没有七项全绿的玩法。',
+        metricsKicker: '尽职调查 · 绝对审计过',
+        metricsTitle: '数字已经开口。主要说了个寂寞。',
+        metricsSub: '一家没有真实用户的创业公司，拥有一块实时指标板。每一个 0 都是早期信号。',
+        boardMetric: '指标',
+        boardValue: '数值',
+        boardInterpretation: '投资人级别解读',
+        jokeMetrics: [
+          {name:'玩家', value:'0', status:'上线前用户增长'},
+          {name:'真实用户', value:'0', status:'未被教育的蓝海市场'},
+          {name:'AI Agent 调用', value:'0', status:'极致 TOKEN 效率'},
+          {name:'营收', value:'¥0', status:'变现前规模化'},
+          {name:'方向漂移', value:'∞', status:'持续产品探索'},
+          {name:'吹嘘', value:'94', status:'纯有机增长*'},
+          {name:'估值', value:'$4.2M', status:'已经创始人验证'},
+        ],
+        boardAudit: '*「有机增长」指创始人在三个群里发过链接。',
         metrics: [
-          {key:'Hype', name:'热度', color:'#E8B53A', d:'市场热度。叙事的势能，能打开门，也能埋下陷阱。'},
-          {key:'Product', name:'产品', color:'#62D08A', d:'你真正交付的东西。demo 与现实之间的差距。'},
-          {key:'Cash', name:'现金', color:'#E8734A', d:'跑道。每一个决策背后的倒计时。'},
-          {key:'Team', name:'团队', color:'#7FB85A', d:'士气与凝聚力。归零时，团队就会散。'},
-          {key:'Trust', name:'信任', color:'#6FA8E8', d:'用户的信念。很难建立，极易烧光。'},
-          {key:'Reputation', name:'声誉', color:'#C58BE8', d:'行业怎么看你。媒体能成就你，也能毁掉你。'},
-          {key:'Sanity', name:'清醒', color:'#E8A23A', d:'战略清晰度。失去它，所有选择看起来都一样。'},
+          {key:'Hype', name:'热度', color:'#E8B53A', d:'第一个上线的产品。通常比真正的产品更早。'},
+          {key:'Product', name:'产品', color:'#62D08A', d:'正在努力追赶宣传页已经承诺的版本。'},
+          {key:'Cash', name:'现金', color:'#E8734A', d:'一个被重新包装成增长战略的倒计时。'},
+          {key:'Team', name:'团队', color:'#7FB85A', d:'士气、凝聚力，以及还有多少人相信转型是故意的。'},
+          {key:'Trust', name:'信任', color:'#6FA8E8', d:'积累很慢，改写成上线小作文却很快。'},
+          {key:'Reputation', name:'声誉', color:'#C58BE8', d:'行业只看了标题之后，对你的整体印象。'},
+          {key:'Sanity', name:'清醒', color:'#E8A23A', d:'战略清晰度。也是 Demo Day 上第一个被牺牲的指标。'},
         ],
         momentsKicker: '关键节点',
         momentsTitle: '决定成败的那些时刻。',
@@ -526,7 +609,8 @@ class Component extends DCLogic {
         ctaTitle: '你的想法正在等你。',
         ctaSub: '市场在等，所剩无几的现金也在等。该做第一个决定了。',
         ctaBtn: '进入游戏',
-        footNote: 'AUTO STARTUP — 一款 AI 创业模拟器 · © 2026',
+        footNote: 'AUTO STARTUP — 一款 AI 创业模拟器* · © 2026',
+        footerAudit: '* 没有 Agent，没有融资，只有远超实际进度的自信。',
       },
     };
     const lang = this.lang;
