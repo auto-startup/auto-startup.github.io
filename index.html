@@ -39,22 +39,11 @@
   .metric-board-row:last-child { border-bottom:none; }
   .metric-board-value { color:#E8B53A; font-family:'Space Mono',monospace; font-size:20px; font-weight:700; }
   .metric-board-status { color:#AAA79D; font-family:'Space Mono',monospace; font-size:10px; letter-spacing:.06em; }
-  .showcase-grid { display:grid; grid-template-columns:minmax(0,1.55fr) minmax(260px,.85fr); gap:18px; align-items:stretch; }
-  .showcase-card { background:#13130E; border:1px solid #2A2920; border-radius:18px; overflow:hidden; box-shadow:0 32px 70px -44px rgba(20,18,10,.78); color:#ECECE4; }
-  .showcase-window { position:relative; background:#080906; overflow:hidden; }
-  .showcase-window-main { aspect-ratio:16/9; }
-  .showcase-window-boss { aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; }
-  .showcase-window-main img { width:100%; height:calc(100% + 52px); object-fit:cover; object-position:center bottom; display:block; transform:translateY(-52px); }
-  .showcase-window-boss img { width:100%; height:100%; object-fit:cover; object-position:center; display:block; image-rendering:auto; }
-  .showcase-meta { padding:18px 20px 20px; }
   @media (min-width: 780px) { .navlink { display: inline !important; } }
   @media (max-width: 620px) {
     .metric-board-head { display:none; }
     .metric-board-row { grid-template-columns:1fr auto; gap:5px 14px; }
     .metric-board-status { grid-column:1 / -1; }
-    .showcase-grid { grid-template-columns:1fr; }
-    .showcase-window-main, .showcase-window-boss { aspect-ratio:4/3; }
-    .showcase-window-main img { height:calc(100% + 34px); transform:translateY(-34px); }
   }
 </style>
 </helmet>
@@ -146,38 +135,6 @@
     </div>
     <div style="text-align:center; font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:.18em; color:#A8A293; margin:26px 0 8px;"><span class="strike-x">{{ strip }}</span></div>
     <div class="audit-red" style="text-align:center; font-size:10px; letter-spacing:.08em;">{{ stripAudit }}</div>
-  </div>
-
-  <!-- ===== REAL GAMEPLAY SHOTS ===== -->
-  <div id="showcase" style="max-width:1140px; margin:0 auto; padding:clamp(64px,9vw,100px) clamp(18px,4vw,32px) 0; scroll-margin-top:80px;">
-    <div style="max-width:39em; margin-bottom:34px;">
-      <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.2em; color:#8A6D1F; margin-bottom:14px;">{{ showcaseKicker }}</div>
-      <h2 style="font-size:clamp(30px,4.4vw,48px); font-weight:700; letter-spacing:-.025em; line-height:1.08; margin:0 0 14px; text-wrap:balance;">{{ showcaseTitle }}</h2>
-      <p style="font-size:16px; line-height:1.65; color:#5A564B; margin:0;">{{ showcaseSub }}</p>
-    </div>
-    <div class="showcase-grid">
-      <a href="{{ gameUrl }}" class="showcase-card" style="text-decoration:none; color:#ECECE4;">
-        <div class="showcase-window showcase-window-main">
-          <img src="screenshots/game-after-six-actions.png" alt="{{ showcaseMainAlt }}">
-          <div style="position:absolute; inset:14px auto auto 14px; font-family:'Space Mono',monospace; font-size:9px; letter-spacing:.12em; color:#15150F; background:#E8B53A; border-radius:999px; padding:6px 10px;">{{ showcaseMainTag }}</div>
-        </div>
-        <div class="showcase-meta">
-          <div style="font-size:20px; font-weight:700; margin-bottom:7px;">{{ showcaseMainTitle }}</div>
-          <div style="font-size:13.5px; line-height:1.55; color:#A8A69B;">{{ showcaseMainBody }}</div>
-        </div>
-      </a>
-      <a href="{{ gameUrl }}" class="showcase-card" style="text-decoration:none; color:#ECECE4;">
-        <div class="showcase-window showcase-window-boss">
-          <img src="screenshots/game-boss.jpg" alt="{{ showcaseBossAlt }}">
-          <div style="position:absolute; inset:14px auto auto 14px; font-family:'Space Mono',monospace; font-size:9px; letter-spacing:.12em; color:#FFFFFF; background:#D9473F; border-radius:999px; padding:6px 10px;">{{ showcaseBossTag }}</div>
-        </div>
-        <div class="showcase-meta">
-          <div style="font-size:20px; font-weight:700; margin-bottom:7px;">{{ showcaseBossTitle }}</div>
-          <div style="font-size:13.5px; line-height:1.55; color:#A8A69B;">{{ showcaseBossBody }}</div>
-        </div>
-      </a>
-    </div>
-    <div class="audit-red" style="font-size:10px; margin-top:16px; letter-spacing:.06em;">{{ showcaseAudit }}</div>
   </div>
 
   <!-- ===== LOOP ===== -->
@@ -432,18 +389,6 @@ class Component extends DCLogic {
         ],
         strip: 'RUNS ON AI AGENTS · NOT ON REAL MONEY · DEFINITELY NOT FINANCIAL ADVICE',
         stripAudit: '✕ Correction: runs on JavaScript, prewritten events, and founder-grade confidence.',
-        showcaseKicker: 'ACTUAL GAMEPLAY · NO CONCEPT ART',
-        showcaseTitle: 'The pitch changes. The dashboard remembers.',
-        showcaseSub: 'These are real frames from a played run: one after six operating decisions, and one at the first monthly boss round.',
-        showcaseMainTag: 'AFTER 6 OPERATIONS',
-        showcaseMainTitle: 'The operating dashboard',
-        showcaseMainBody: 'Metrics moved, teammates started doubting, and the company name already drifted several times.',
-        showcaseMainAlt: 'Auto Startup operating dashboard after six real game decisions',
-        showcaseBossTag: 'MONTH 1 · BOSS',
-        showcaseBossTitle: 'Startup Hackathon',
-        showcaseBossBody: 'Three judges, four rebuttals, and three lights deciding whether the company advances or goes dark.',
-        showcaseBossAlt: 'Auto Startup Startup Hackathon boss round',
-        showcaseAudit: '✕ Captured from an actual run. No mock dashboard was harmed in the making of this landing page.',
         loopKicker: 'THE REAL LOOP',
         loopTitle: "Startups don't go in a straight line.",
         loopSub: 'The neat version is idea → product → funding → success. The real version is a loop you never quite escape.',
@@ -571,18 +516,6 @@ class Component extends DCLogic {
         ],
         strip: '由 AI AGENTS 驱动 · 不烧真钱 · 绝非投资建议',
         stripAudit: '✕ 更正：由 JavaScript、预设事件和创始人级别的自信驱动。',
-        showcaseKicker: '真实游戏画面 · 不是概念图',
-        showcaseTitle: '话术会变，仪表盘都记得。',
-        showcaseSub: '两张都来自真实游戏流程：一张是完成 6 项周操作后的主界面，一张是第一个月末 Boss 关。',
-        showcaseMainTag: '已完成 6 项操作',
-        showcaseMainTitle: '经营主界面',
-        showcaseMainBody: '指标已经变动，队友开始怀疑，公司名字也已经漂移了好几次。',
-        showcaseMainAlt: 'Auto Startup 完成六次真实选择后的经营主界面',
-        showcaseBossTag: '第 1 月 · BOSS',
-        showcaseBossTitle: 'Startup Hackathon',
-        showcaseBossBody: '三位评委、四轮 Rebuttal、三盏灯。过关还是全灭，取决于你怎么把话圆回来。',
-        showcaseBossAlt: 'Auto Startup 第一个月末 Startup Hackathon Boss 关',
-        showcaseAudit: '✕ 实际跑了一局后截取。没有用概念图代替游戏画面。',
         loopKicker: '真实的循环',
         loopTitle: '创业从来不是一条直线。',
         loopSub: '理想版本是 想法 → 产品 → 融资 → 成功。真实版本，是一个你逃不出的循环。',
