@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -352,8 +352,8 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:3400},&quot;gameUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;AI%20Manager.dc.html&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Links&quot;},&quot;githubUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://github.com/chenyirui/auto-startup&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Links&quot;},&quot;langDefault&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;zh&quot;,&quot;options&quot;:[&quot;en&quot;,&quot;zh&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;}}">
 class Component extends DCLogic {
-  state = { lang: null, pick: null };
-  get lang() { return this.state.lang || this.props.langDefault || 'zh'; }
+  state = { lang: 'zh', pick: null };
+  get lang() { return this.state.lang || 'zh'; }
   setLang(l) { this.setState({ lang: l }); }
 
   renderVals() {
