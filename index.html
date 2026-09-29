@@ -350,10 +350,10 @@
 
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:3400},&quot;gameUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;AI%20Manager.dc.html&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Links&quot;},&quot;githubUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://github.com/chenyirui/auto-startup&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Links&quot;},&quot;langDefault&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;en&quot;,&quot;options&quot;:[&quot;en&quot;,&quot;zh&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:3400},&quot;gameUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;AI%20Manager.dc.html&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Links&quot;},&quot;githubUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://github.com/chenyirui/auto-startup&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Links&quot;},&quot;langDefault&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;zh&quot;,&quot;options&quot;:[&quot;en&quot;,&quot;zh&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;}}">
 class Component extends DCLogic {
   state = { lang: null, pick: null };
-  get lang() { return this.state.lang || this.props.langDefault || 'en'; }
+  get lang() { return this.state.lang || this.props.langDefault || 'zh'; }
   setLang(l) { this.setState({ lang: l }); }
 
   renderVals() {
@@ -399,7 +399,7 @@ class Component extends DCLogic {
         weekSub: 'The game moves week by week. Each one runs the same loop — and never quite the same outcome.',
         weekSteps: [
           {n:'01', t:'Market news', d:'The world shifts. A rival raises, a season turns, the press picks a narrative.'},
-          {n:'02', t:'Agent roundtable*', d:'Your team, investors and users weigh in. *All attendees are prewritten objects; attendance is 100%.'},
+          {n:'02', t:'❌ Agent roundtable (no real agents)', d:'Your team, investors and users weigh in through prewritten characters.'},
           {n:'03', t:'Your call', d:'Pick from a handful of options. No tooltip tells you which one is right.'},
           {n:'04', t:'Metrics shift', d:'Seven numbers move. Some up, some down — always a trade.'},
           {n:'05', t:'Next event unlocks', d:'Your choice opens the door to whatever comes after it.'},
@@ -434,8 +434,8 @@ class Component extends DCLogic {
           {n:'03', t:'Market cycles', d:'Funding booms, delivery crunches, AI hype, and skeptic seasons rewrite the rules before the product ships.', audit:'Current moat: the pitch deck is 48 slides long.'},
         ],
         metricsKicker: 'DUE DILIGENCE · DEFINITELY AUDITED',
-        metricsTitle: 'The numbers are speaking. Mostly about nothing.',
-        metricsSub: 'A live startup dashboard for a startup with no live users. Every zero is an early signal.',
+        metricsTitle: 'The game is live.',
+        metricsSub: 'Play now and see how many weeks your company can survive.',
         boardMetric: 'METRIC',
         boardValue: 'VALUE',
         boardInterpretation: 'INVESTOR-GRADE INTERPRETATION',
@@ -526,7 +526,7 @@ class Component extends DCLogic {
         weekSub: '游戏以「周」为单位推进。每周都跑同一个循环——但结果从不相同。',
         weekSteps: [
           {n:'01', t:'市场新闻', d:'世界在变。对手融资、季节更替、媒体选定了一个叙事。'},
-          {n:'02', t:'Agent 圆桌讨论*', d:'团队、投资人、用户各执一词。*参会者均为预先写好的对象，出勤率 100%。'},
+          {n:'02', t:'❌ Agent 圆桌讨论（没有真实 Agent）', d:'团队、投资人和用户通过预先写好的角色各执一词。'},
           {n:'03', t:'玩家做出选择', d:'从几个选项里挑一个。没有提示告诉你哪个是对的。'},
           {n:'04', t:'公司指标变化', d:'七个数字开始移动。有升有降，永远是权衡。'},
           {n:'05', t:'解锁后续事件', d:'你的选择，打开了接下来发生的事。'},
@@ -561,8 +561,8 @@ class Component extends DCLogic {
           {n:'03', t:'市场周期', d:'融资热潮、交付高压、AI 风口和质疑期，都比产品上线更早。', audit:'当前护城河：一份 48 页的 Pitch Deck。'},
         ],
         metricsKicker: '尽职调查 · 绝对审计过',
-        metricsTitle: '数字已经开口。主要说了个寂寞。',
-        metricsSub: '一家没有真实用户的创业公司，拥有一块实时指标板。每一个 0 都是早期信号。',
+        metricsTitle: '游戏已经可以试玩。',
+        metricsSub: '现在进入游戏，看看你的公司能活到第几周。',
         boardMetric: '指标',
         boardValue: '数值',
         boardInterpretation: '投资人级别解读',
