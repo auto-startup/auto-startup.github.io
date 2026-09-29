@@ -3,7 +3,7 @@
 > 产品可能还没准备好，但估值已经非常健康。  
 > The product may not be ready, but the valuation is doing great.
 
-**计划公开地址 / Planned public URL:** [https://auto-startup.github.io/](https://auto-startup.github.io/)
+**在线试玩 / Play now:** [https://auto-startup.github.io/](https://auto-startup.github.io/)
 
 ## 中文
 
